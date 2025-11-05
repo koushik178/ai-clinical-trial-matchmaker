@@ -1,25 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Search.css";
-import heartImg from "../assets/login.png"; // Replace later with real images
+import Sidebar from "../components/Sidebar";   // ✅ import the reusable sidebar
+import heartImg from "../assets/login.png";
 
 function Search() {
+  const navigate = useNavigate();
+  const [activeKey, setActiveKey] = useState("find");  // ✅ sidebar active state
+
   return (
     <div className="search-container">
-      {/* Sidebar */}
-      <aside className="sidebar">
-        <h2 className="sidebar-title">Clinical Trial</h2>
-        <div className="nav-buttons">
-          <button className="nav-btn">🔍 Find Trials Easily</button>
-          <button className="nav-btn">📋 Trial Details</button>
-          <button className="nav-btn">⭐ Saved Trials</button>
-          <button className="nav-btn">🔔 Alerts</button>
-        </div>
-        <button className="start-btn">Start Search</button>
-        <div className="bottom-links">
-          <p>👤 Profile</p>
-          <p>🚪 Log out</p>
-        </div>
-      </aside>
+      {/* Sidebar (same as Home) */}
+      <Sidebar activeKey={activeKey} setActiveKey={setActiveKey} />
 
       {/* Main content */}
       <main className="search-main">
@@ -68,11 +60,11 @@ function Search() {
           <div>
             <h4>Eligibility</h4>
             <div className="filter-icons">
-              <span>⚫</span>
-              <span>⚫</span>
-              <span>⚫</span>
-              <span>⚫</span>
-              <span>⚫</span>
+              <span>✅</span>
+              <span>✅</span>
+              <span>✅</span>
+              <span>✅</span>
+              <span>✅</span>
             </div>
           </div>
           <div>

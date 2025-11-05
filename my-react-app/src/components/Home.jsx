@@ -1,16 +1,9 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 import "./Home.css";
-import profilePic from "../assets/login.png"; // temporary placeholder
+import profilePic from "../assets/login.png";
+import Sidebar from "./Sidebar"; // ✅ Reusable Sidebar component
 
 const Home = () => {
-  const navigate = useNavigate();
-
-  // collapsible sidebar state
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [activeKey, setActiveKey] = useState("find");
-
-  // mock user data (easily replaceable with API)
   const user = {
     name: "John Doe",
     age: 35,
@@ -26,70 +19,10 @@ const Home = () => {
     favorites: 2,
   };
 
-  // nav config (easy to extend / route later)
-  const navItems = [
-    { key: "find", label: "Find trials easily", icon: "🔍", onClick: () => navigate("/search") },
-    { key: "details", label: "Trial Details", icon: "📋", onClick: () => {} },
-    { key: "saved", label: "Saved Trials", icon: "⭐", onClick: () => {} },
-    { key: "alerts", label: "Alerts", icon: "🔔", onClick: () => {} },
-  ];
-
   return (
-    <div className={`home-container ${isCollapsed ? "sidebar-collapsed" : ""}`}>
-      {/* Sidebar */}
-      <aside className="sidebar" aria-label="Primary">
-        <div className="sidebar-top">
-          <h2 className="brand">
-            <span className="brand-line">Clinical</span>
-            <span className="brand-line">Trial</span>
-          </h2>
-
-          <button
-            className="collapse-toggle"
-            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-            aria-expanded={!isCollapsed}
-            onClick={() => setIsCollapsed((v) => !v)}
-          >
-            <span className="bar" />
-            <span className="bar" />
-            <span className="bar" />
-          </button>
-        </div>
-
-        <nav className="nav-list">
-          {navItems.map(({ key, label, icon, onClick }) => (
-            <button
-              key={key}
-              className={`nav-btn ${activeKey === key ? "active" : ""}`}
-              onClick={() => {
-                setActiveKey(key);
-                onClick?.();
-              }}
-            >
-              <span className="nav-ico" aria-hidden="true">{icon}</span>
-              <span className="nav-label">{label}</span>
-            </button>
-          ))}
-        </nav>
-
-        <div className="sidebar-footer">
-          <button className="start-btn" onClick={() => navigate("/search")}>
-            <span className="start-ico" aria-hidden="true">▶</span>
-            <span className="start-label">Start Search</span>
-          </button>
-
-          <div className="aux-links">
-            <button className="aux-btn">
-              <span className="aux-ico" aria-hidden="true">⚙</span>
-              <span className="aux-label">Profile</span>
-            </button>
-            <button className="aux-btn">
-              <span className="aux-ico" aria-hidden="true">↪</span>
-              <span className="aux-label">Log out</span>
-            </button>
-          </div>
-        </div>
-      </aside>
+    <div className="home-container">
+      {/* ✅ Sidebar imported instead of inline code */}
+      <Sidebar />
 
       {/* Main Content */}
       <main className="main-content">
@@ -121,23 +54,79 @@ const Home = () => {
         </section>
 
         <section className="age-filter">
+          <h4 className="age-filter-title">Age filter</h4>
           {["18-30", "31-45", "46-60", "61+", "All"].map((age) => (
-            <button key={age} className="chip">{age}</button>
+            <button key={age} className="chip active-chip">{age}</button>
           ))}
         </section>
 
-        <section className="details-grid">
-          <div className="detail-card">
-            <h4>Eligibility</h4>
-            <p>Age & Condition</p>
+        {/* Trial and Search Details Section */}
+        <section className="bottom-grid">
+          {/* Left Side — Search Trials */}
+          <div className="search-trials">
+            <h4>Search Trials</h4>
+            <div className="search-item">
+              <span>Find</span>
+              <div className="progress">
+                <div className="bar green" style={{ width: "80%" }}></div>
+              </div>
+            </div>
+            <div className="search-item">
+              <span>Health Conditions</span>
+              <div className="progress">
+                <div className="bar green" style={{ width: "60%" }}></div>
+              </div>
+            </div>
+            <div className="search-item">
+              <span>Age</span>
+              <div className="progress">
+                <div className="bar green" style={{ width: "90%" }}></div>
+              </div>
+            </div>
+
+            <div className="search-trials-meta">
+              <div>
+                <p>Your Clinical</p>
+                <p><strong>Diabetes</strong></p>
+              </div>
+              <div>
+                <p>Explore</p>
+                <p><strong>Cancer</strong></p>
+              </div>
+              <div>
+                <p>Join</p>
+                <p><strong>65+</strong></p>
+              </div>
+              <div>
+                <p>More Detail</p>
+                <p><strong>15</strong></p>
+              </div>
+            </div>
           </div>
-          <div className="detail-card">
-            <h4>Matched Trials</h4>
-            <p>{trials.matchedTrials} trials</p>
-          </div>
-          <div className="detail-card">
-            <h4>Favorites</h4>
-            <p>{trials.favorites} saved</p>
+
+          {/* Right Side — Trial Details */}
+          <div className="trial-details-container">
+            <div className="trial-card">
+              <div className="icon">ℹ️</div>
+              <div>
+                <h4>Eligibility</h4>
+                <p>Age & Condition</p>
+              </div>
+            </div>
+            <div className="trial-card">
+              <div className="icon">✅</div>
+              <div>
+                <h4>Matched Trials</h4>
+                <p>3 trials</p>
+              </div>
+            </div>
+            <div className="trial-card">
+              <div className="icon">⭐</div>
+              <div>
+                <h4>Favorites</h4>
+                <p>2 saved</p>
+              </div>
+            </div>
           </div>
         </section>
       </main>
@@ -145,7 +134,7 @@ const Home = () => {
       {/* Right Profile Panel */}
       <aside className="profile-panel" aria-label="User summary">
         <div className="profile-card">
-          <img src={profilePic} alt="" />
+          <img src={profilePic} alt="Profile" />
           <h3 className="profile-name">{user.name}</h3>
 
           <div className="profile-meta">
@@ -164,9 +153,9 @@ const Home = () => {
         </div>
 
         <div className="upcoming">
-          <button className="pill">📅  Trial for Diabetes</button>
-          <button className="pill">⏰  Follow-up Appointment</button>
-          <button className="pill">⭐  Recommended Trials</button>
+          <button className="pill">📅 Trial for Diabetes</button>
+          <button className="pill">⏰ Follow-up Appointment</button>
+          <button className="pill">⭐ Recommended Trials</button>
         </div>
 
         <button className="edit-btn">Edit Info</button>

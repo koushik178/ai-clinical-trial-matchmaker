@@ -1,27 +1,28 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Login.css";
 import loginImage from "../assets/login.png";
 
 function Login({ onLogin }) {
-  // Local state for form inputs
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    onLogin(email, password); // ✅ Pass values to App.jsx
+    onLogin(email, password);
+    if (email === "koushik@gmail.com" && password === "12345") {
+      navigate("/home");
+    }
   };
 
   return (
     <div className="login-container">
-      {/* Left side with image */}
       <div className="login-left">
-        <div className="logo">TrialMatchMaker</div>
+        <div className="logo">TrialMatcher</div>
         <img src={loginImage} alt="Login Illustration" className="login-image" />
       </div>
 
-      {/* Right side with form */}
       <div className="login-right">
         <h2 className="login-title">Log in</h2>
         <form className="login-form" onSubmit={handleSubmit}>
