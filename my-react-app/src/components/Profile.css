@@ -1,0 +1,172 @@
+.profile-page {
+  display: flex;
+  min-height: 100vh;
+  background: #f6f7f8;
+  color: #1c1f24;
+  font-family: "Inter", sans-serif;
+}
+
+/* main section */
+.profile-main {
+  flex: 1;
+  padding: 20px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* header */
+.profile-header h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.participant-name {
+  font-weight: 700;
+}
+
+/* participant info */
+.participant-info {
+  background: #edf1f3;
+  border-radius: 10px;
+  padding: 18px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+}
+
+.participant-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.participant-avatar img {
+  width: 70px;
+  height: 70px;
+  border-radius: 8px;
+}
+
+.participant-details p {
+  margin: 4px 0;
+  font-size: 0.95rem;
+}
+
+/* layout grid */
+.profile-content {
+  display: grid;
+  grid-template-columns: 1.2fr 1.5fr 0.8fr;
+  gap: 20px;
+}
+
+.info-box {
+  background: #e9ebef;
+  border-radius: 10px;
+  padding: 16px 18px;
+}
+
+.info-box h3 {
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.info-item .icon {
+  font-size: 1.2rem;
+}
+
+.info-item .title {
+  font-weight: 600;
+  margin: 0;
+}
+
+.info-item .desc {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0;
+}
+
+.arrow {
+  color: #888;
+}
+
+/* Health section */
+.health-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.health-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.health-img {
+  width: 90px;
+  opacity: 0.9;
+}
+
+.health-desc p {
+  margin: 5px 0;
+}
+
+/* Heart rate */
+.heart-graph {
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+  height: 100px;
+  margin-top: 10px;
+}
+
+.heart-graph .bar {
+  width: 6px;
+  background: #2e9d43;
+  border-radius: 4px;
+  transition: height 0.3s ease;
+}
+
+/* Right stats */
+.stat-card {
+  background: #f3f4f5;
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.stat-icon {
+  font-size: 1.3rem;
+}
+
+.stat-title {
+  font-weight: 700;
+  margin: 0;
+}
+
+.stat-desc {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .profile-content {
+    grid-template-columns: 1fr;
+  }
+}

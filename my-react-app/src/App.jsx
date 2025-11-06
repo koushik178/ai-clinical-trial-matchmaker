@@ -7,6 +7,7 @@ import Search from "./components/Search";
 import Notifications from "./components/Notifications";
 import TrialDetails from "./components/TrialDetails";
 import SavedTrials from "./components/SavedTrials";
+import Profile from "./components/Profile";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -43,6 +44,7 @@ function App() {
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/details" element={<TrialDetails />} /> {/* ✅ New route */}
         <Route path="/saved" element={<SavedTrials />} /> {/* ✅ new route */}
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
   );
