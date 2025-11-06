@@ -1,0 +1,186 @@
+:root {
+  --green: #2e9d43;
+  --green-600: #238534;
+  --panel: #ffffff;
+  --ghost: #f5f6f7;
+  --border: #e5e7ea;
+  --text: #222;
+  --muted: #667085;
+}
+
+/* page frame */
+.pf-wrap {
+  min-height: 100vh;
+  background: #fafafa;
+  color: var(--text);
+  font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+/* top bar */
+.pf-topbar {
+  height: 60px;
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 18px;
+}
+
+.pf-brand {
+  font-weight: 800;
+  font-size: 22px;
+}
+
+/* grid: sidebar + main */
+.pf-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr; /* Sidebar width matches Sidebar.css */
+  gap: 0;
+}
+
+/* main content */
+.pf-main {
+  padding: 22px 28px;
+}
+
+.pf-title {
+  font-size: 24px;
+  font-weight: 800;
+  margin: 4px 0 14px;
+}
+.pf-name { letter-spacing: .2px; }
+
+/* top info area */
+.pf-info {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.pf-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.04);
+}
+
+.pf-id {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  align-items: center;
+  gap: 12px;
+}
+.pf-avatar {
+  width: 72px; height: 72px;
+  border-radius: 8px;
+  background: radial-gradient(#bbb, #888);
+}
+.pf-id-label { color: #444; font-weight: 600; }
+.pf-id-name { font-size: 22px; font-weight: 800; }
+
+.pf-brief > div { margin-bottom: 6px; }
+
+/* rows */
+.pf-row {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 320px;
+  align-items: start;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+/* list cards */
+.pf-list h3,
+.pf-health h3,
+.pf-heart h3 { margin-bottom: 10px; font-size: 16px; }
+
+.pf-list ul { list-style: none; padding: 0; margin: 0; }
+.pf-list li {
+  display: grid;
+  grid-template-columns: 18px 1fr 14px;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 4px;
+  border-top: 1px solid #f0f0f0;
+}
+.pf-list li:first-child { border-top: none; }
+.pf-dot, .pf-pill {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: #111;
+}
+.pf-pill { background: #2c7be5; }
+.pf-li-title { font-weight: 700; font-size: 14px; }
+.pf-li-sub { color: #666; font-size: 12px; }
+.pf-arrow { color: #999; }
+
+/* health card */
+.pf-health-grid {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 12px;
+  align-items: center;
+}
+.pf-doc-ico {
+  width: 120px; height: 120px;
+  border-radius: 10px;
+  background:
+    radial-gradient(circle at 60% 40%, #000 8px, transparent 8px) 0 0/40px 40px no-repeat,
+    radial-gradient(circle at 40% 60%, #000 8px, transparent 8px) 40px 40px/40px 40px no-repeat,
+    radial-gradient(circle at 50% 50%, #000 46px, transparent 47px);
+  mask: radial-gradient(circle at 50% 30%, #000 50px, transparent 51px);
+  background-color: #111;
+}
+.pf-health-notes { margin: 0; padding-left: 16px; }
+.pf-health-notes li { margin: 6px 0; }
+
+/* right column metric cards */
+.pf-side-cards { display: grid; gap: 12px; }
+.pf-metric-row { display: flex; align-items: center; gap: 10px; }
+.pf-metric-ico { font-size: 18px; }
+.pf-metric-title { font-weight: 800; }
+.pf-metric-sub { font-size: 12px; color: #666; }
+
+/* heart sparkline (simple bars) */
+.pf-spark {
+  display: flex;
+  align-items: end;
+  gap: 4px;
+  height: 70px;
+  margin-top: 8px;
+  padding: 6px 0;
+  border-top: 1px dashed #eee;
+}
+.pf-spark span {
+  width: 8px;
+  background: #2e9d43;
+  border-radius: 4px;
+}
+
+/* responsive */
+@media (max-width: 1100px) {
+  .pf-info { grid-template-columns: 1fr; }
+  .pf-row { grid-template-columns: 1fr; }
+}
+
+/* bpm display (replaces the old sparkline) */
+.pf-heart .pf-bpm {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 12px 6px 4px;
+}
+
+.pf-bpm-num {
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.pf-bpm-unit {
+  font-size: 13px;
+  text-transform: uppercase;
+  color: #7a7a7a;
+  letter-spacing: 0.5px;
+}
