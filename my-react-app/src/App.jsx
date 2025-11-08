@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import Login from "./components/Login";
+import Signup from "./components/Signup";
 import Home from "./components/Home";
 import Search from "./components/Search";
 import Notifications from "./components/Notifications";
@@ -30,6 +31,7 @@ function App() {
 
         {/* Login route */}
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
+        <Route path="/signup" element={<Signup />} />
 
         {/* Protected routes */}
         <Route

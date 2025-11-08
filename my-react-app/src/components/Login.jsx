@@ -49,6 +49,14 @@ function Login({ onLogin }) {
           <button type="submit" className="login-button">
             Sign In
           </button>
+          <p style={{ textAlign: "center", marginTop: "10px" }}>
+            Don’t have an account?{" "}
+            <span
+              onClick={() => navigate("/signup")}
+              style={{ color: "#36a54a", cursor: "pointer", fontWeight: "600" }}>
+            Sign Up
+            </span>
+          </p>
         </form>
       </div>
     </div>
