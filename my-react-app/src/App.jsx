@@ -8,6 +8,7 @@ import Notifications from "./components/Notifications";
 import TrialDetails from "./components/TrialDetails";
 import SavedTrials from "./components/SavedTrials";
 import Profile from "./components/Profile";
+import Signup from "./components/Signup";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -45,6 +46,7 @@ function App() {
         <Route path="/details" element={<TrialDetails />} /> {/* ✅ New route */}
         <Route path="/saved" element={<SavedTrials />} /> {/* ✅ new route */}
         <Route path="/profile" element={<Profile />} />
+        <Route path="/signup" element={<Signup />} />
       </Routes>
     </Router>
   );
