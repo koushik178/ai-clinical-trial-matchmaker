@@ -42,10 +42,11 @@
   padding: 8px;
   margin-left: auto;
   transition: background-color 0.2s ease-in-out, transform 0.2s ease;
+  border-radius: 8px;
 }
 
 .collapse-toggle:hover {
-  background-color: rgba(46, 157, 67, 0.1);
+  background-color: rgba(46, 157, 67, 0.08);
 }
 
 .collapse-toggle .bar {
@@ -108,6 +109,7 @@
   padding: 8px 4px 4px;
 }
 
+/* Start button (primary) */
 .start-btn {
   width: 100%;
   display: flex;
@@ -134,22 +136,57 @@
   gap: 8px;
 }
 
+/* Make aux buttons more visible (not muted) */
 .aux-btn {
   display: flex;
   align-items: center;
   gap: 10px;
   background: transparent;
   border: none;
-  color: var(--muted);
+  color: var(--text);
   cursor: pointer;
   padding: 10px 8px;
   border-radius: 10px;
-  transition: all 0.2s ease;
+  transition: all 0.18s ease;
+  font-weight: 700;
 }
 
+.aux-btn .aux-ico {
+  opacity: 0.95;
+}
+
+/* Hover states */
 .aux-btn:hover {
   background: var(--ghost);
   color: var(--text);
+  transform: translateX(2px);
+}
+
+/* specific profile button style (active state) */
+.profile-btn.active {
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  border-left: 3px solid var(--green);
+}
+
+/* logout button style (accent) */
+.logout-btn {
+  color: #fff;
+  background: #e53935;
+  padding: 10px;
+  border-radius: 10px;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.logout-btn:hover {
+  background: #c62828;
+  transform: translateX(2px);
+}
+
+.aux-btn .aux-label {
+  transition: opacity 0.2s ease;
 }
 
 /* ===== COLLAPSE BEHAVIOR ===== */

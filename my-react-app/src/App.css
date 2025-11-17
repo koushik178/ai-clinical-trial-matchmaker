@@ -1,26 +1,39 @@
-/* App.css (cleaned up) */
+/* App.css — Clean global styling */
 
-/* Reset default padding and margins */
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Root setup */
 html,
 body,
 #root {
-  margin: 0;
-  padding: 0;
   height: 100%;
   width: 100%;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  background-color: #ffffff;
 }
 
-/* Make sure root container fits full viewport */
+/* Let pages expand naturally & allow scroll */
+body {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Ensure React root behaves like a full layout container */
 #root {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #fff;
-  text-align: left;
 }
 
-/* Optional: global font */
-body {
-  font-family: "Segoe UI", Arial, sans-serif;
-  background-color: #fff;
+/* Generic container utility (optional future use) */
+.page-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }

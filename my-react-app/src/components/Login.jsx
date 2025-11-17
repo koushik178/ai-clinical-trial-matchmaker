@@ -3,16 +3,45 @@ import { useNavigate } from "react-router-dom";
 import "./Login.css";
 import loginImage from "../assets/login.png";
 
-function Login({ onLogin }) {
+function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    onLogin(email, password);
-    if (email === "koushik@gmail.com" && password === "12345") {
+    setError("");
+
+    try {
+      const response = await fetch(
+        "https://ai-clinical-trial-matchmaker.onrender.com/users/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            accept: "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error || "Invalid login credentials");
+        return;
+      }
+
+      localStorage.setItem("access_token", data.access_token);
+      localStorage.setItem("user_id", data.user_id);
+      localStorage.setItem("email", data.email);
+      localStorage.setItem("first_name", data.first_name);
+      localStorage.setItem("last_name", data.last_name);
+
       navigate("/home");
+    } catch (err) {
+      setError("Login failed. Try again.");
     }
   };
 
@@ -25,21 +54,22 @@ function Login({ onLogin }) {
 
       <div className="login-right">
         <h2 className="login-title">Log in</h2>
-        <form className="login-form" onSubmit={handleSubmit}>
-          <label htmlFor="email">Your email address</label>
+
+        {error && <p style={{ color: "red" }}>{error}</p>}
+
+        <form className="login-form" onSubmit={handleLogin}>
+          <label>Your email address</label>
           <input
             type="email"
-            id="email"
             placeholder="user@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
 
-          <label htmlFor="password">Password</label>
+          <label>Password</label>
           <input
             type="password"
-            id="password"
             placeholder="****************"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -49,6 +79,13 @@ function Login({ onLogin }) {
           <button type="submit" className="login-button">
             Sign In
           </button>
+
+          <p className="login-signup-link">
+            Don’t have an account?{" "}
+            <a href="/signup" className="link-text">
+              Create one
+            </a>
+          </p>
         </form>
       </div>
     </div>

@@ -1,82 +1,28 @@
+/* MAIN CONTAINER */
 .search-container {
   display: flex;
   height: 100vh;
   width: 100vw;
   font-family: "Poppins", sans-serif;
   overflow: hidden;
+  background-color: #fafafa;
 }
 
-/* Sidebar (same as Home) */
-.sidebar {
-  width: 240px;
-  background-color: #ffffff;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border-right: 1px solid #e2e2e2;
-}
-
-.sidebar-title {
-  font-size: 18px;
-  font-weight: bold;
-  color: #111;
-  margin-bottom: 20px;
-}
-
-.nav-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.nav-btn {
-  background: transparent;
-  border: none;
-  text-align: left;
-  font-size: 1rem;
-  color: #333;
-  padding: 8px 0;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.nav-btn:hover {
-  color: #28a745;
-  background-color: #f0f5f0;
-  border-radius: 5px;
-  padding-left: 8px;
-}
-
-.start-btn {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.bottom-links p {
-  margin: 8px 0;
-  color: #444;
-}
-
-/* Main area */
+/* MAIN CONTENT (Right side) */
 .search-main {
   flex: 1;
   padding: 25px 40px;
   overflow-y: auto;
-  background-color: #fafafa;
 }
 
 .search-title {
-  font-size: 24px;
-  margin-bottom: 15px;
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 20px;
   color: #222;
 }
 
-/* Search bar */
+/* SEARCH BAR */
 .search-bar {
   display: flex;
   align-items: center;
@@ -85,35 +31,47 @@
 
 .search-bar input {
   flex: 1;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  padding: 11px 15px;
+  border-radius: 8px;
+  border: 1px solid #d7d7d7;
   font-size: 1rem;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+.search-bar input:focus {
+  border-color: #28a745;
 }
 
 .find-btn {
-  background-color: #2e9d43;
+  background-color: #28a745;
   color: white;
   border: none;
-  padding: 10px 18px;
-  border-radius: 6px;
-  cursor: pointer;
+  padding: 11px 20px;
+  border-radius: 8px;
   font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
 }
 
-/* Sections */
+.find-btn:hover {
+  background-color: #218838;
+}
+
+/* SECTIONS */
 .section {
-  margin-top: 25px;
+  margin-top: 30px;
 }
 
 .section-title {
-  font-size: 16px;
-  margin-bottom: 10px;
-  text-transform: lowercase;
+  font-size: 17px;
+  margin-bottom: 12px;
+  text-transform: capitalize;
   color: #333;
+  font-weight: 500;
 }
 
-/* Buttons and Tags */
+/* TAGS & CATEGORY BUTTONS */
 .tag-container,
 .category-row {
   display: flex;
@@ -123,30 +81,30 @@
 
 .tag-btn,
 .category-btn {
-  background: #e6e6e6;
+  background: #eaeaea;
   border: none;
   padding: 8px 14px;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 0.9rem;
-  color: #222;              /* ✅ Dark text for readability */
+  font-size: 0.92rem;
+  color: #222;
   font-weight: 500;
   transition: background 0.2s ease, transform 0.1s ease;
 }
 
 .tag-btn:hover,
 .category-btn:hover {
-  background: #d8d8d8;
+  background: #dcdcdc;
   transform: translateY(-1px);
 }
 
+/* FILTERS */
 .filters {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
 }
 
-/* Fix eligibility icons (align & make visible) */
 .filter-icons {
   display: flex;
   align-items: center;
@@ -155,45 +113,42 @@
 }
 
 .filter-icons span {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   width: 22px;
   height: 22px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #28a745;
+  color: white;
   border-radius: 50%;
-         /* ✅ Visible green circles */
-  color: white;               /* ✅ Tick or checkmark color */
   font-size: 14px;
   font-weight: bold;
 }
 
-/* Fix Status button colors */
+/* STATUS BUTTONS */
 .status-tags button {
   margin-right: 10px;
-  background: #e6e6e6;
+  background: #eaeaea;
   border: none;
-  border-radius: 5px;
-  padding: 6px 12px;
+  border-radius: 6px;
+  padding: 8px 14px;
   cursor: pointer;
-  color: #222;               /* ✅ Visible text */
+  color: #222;
   font-weight: 500;
   transition: background 0.2s ease;
 }
 
 .status-tags button:hover {
-  background: #d8d8d8;
+  background: #dcdcdc;
 }
 
-/* Optional: visually highlight active statuses */
-.status-tags button:has(> .active),
-.status-tags button:contains("✅") {
+.status-tags .active {
   background: #dff3e3;
   color: #1a7f2e;
   font-weight: 600;
 }
 
-
-/* Recommended */
+/* RECOMMENDATIONS */
 .recommendations {
   display: flex;
   flex-wrap: wrap;
@@ -202,25 +157,77 @@
 }
 
 .rec-card {
-  width: 200px;
+  width: 210px;
   background: #fff;
-  border-radius: 8px;
-  padding: 10px;
+  border-radius: 10px;
+  padding: 12px;
   text-align: left;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.15s ease;
+}
+
+.rec-card:hover {
+  transform: translateY(-3px);
 }
 
 .rec-card img {
   width: 100%;
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
 .rec-card h5 {
-  font-size: 15px;
-  margin: 8px 0 4px 0;
+  font-size: 16px;
+  margin: 10px 0 5px 0;
+  color: #222;
+  font-weight: 600;
 }
 
 .rec-card p {
   color: #555;
   font-size: 13px;
+}
+
+/* ------------------------------ */
+/* 🔥 SKELETON LOADERS */
+/* ------------------------------ */
+
+.skeleton {
+  background: #e6e6e6;
+  border-radius: 6px;
+  animation: skeleton-loading 1.2s infinite ease-in-out;
+}
+
+.skeleton-text {
+  height: 14px;
+  width: 70%;
+  margin-bottom: 10px;
+}
+
+.skeleton-card {
+  width: 210px;
+  height: 180px;
+  border-radius: 10px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.4;
+  }
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+  .search-main {
+    padding: 20px;
+  }
+
+  .rec-card {
+    width: 100%;
+  }
 }

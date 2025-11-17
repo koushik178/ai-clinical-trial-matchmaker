@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Home.css";
 import profilePic from "../assets/login.png";
 import Sidebar from "./Sidebar"; // ✅ Reusable Sidebar component
 
 const Home = () => {
-  const user = {
+  // keep original fallback user object so UI doesn't change if fetch fails
+  const fallbackUser = {
     name: "John Doe",
     age: 35,
     gender: "Male",
@@ -19,6 +20,55 @@ const Home = () => {
     favorites: 2,
   };
 
+  const [apiUser, setApiUser] = useState(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const token = localStorage.getItem("access_token");
+        if (!token) return; // not logged in
+
+        const res = await fetch(
+          "https://ai-clinical-trial-matchmaker.onrender.com/profile/me",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+            },
+          }
+        );
+
+        if (!res.ok) {
+          // don't throw — just skip using API data
+          console.warn("Failed to fetch profile:", res.statusText);
+          return;
+        }
+
+        const data = await res.json();
+
+        // API returns { user: {...}, patient_profile: {...} } in many examples;
+        // If the endpoint returns nested data, prefer user object inside it.
+        if (data.user) {
+          setApiUser(data.user);
+        } else {
+          // otherwise if endpoint returns a flat user object, use that
+          setApiUser(data);
+        }
+      } catch (err) {
+        console.error("Profile fetch error:", err);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
+  // choose display user: prefer API user first_name, fallback to hard-coded
+  const displayName =
+    (apiUser && (apiUser.first_name || apiUser.name))
+      ? (apiUser.first_name ? apiUser.first_name : apiUser.name)
+      : fallbackUser.name;
+
   return (
     <div className="home-container">
       {/* ✅ Sidebar imported instead of inline code */}
@@ -29,7 +79,7 @@ const Home = () => {
         <div className="breadcrumb">Home / Clinical Trials</div>
 
         <section className="welcome-box">
-          <h2 className="welcome-title">Welcome, {user.name}!</h2>
+          <h2 className="welcome-title">Welcome, {displayName}!</h2>
           <p className="welcome-copy">
             Today is Monday, January 12. You have 1 trial matched, and your next follow-up
             is scheduled for next week. Stay informed and engaged with your health.
@@ -135,11 +185,11 @@ const Home = () => {
       <aside className="profile-panel" aria-label="User summary">
         <div className="profile-card">
           <img src={profilePic} alt="Profile" />
-          <h3 className="profile-name">{user.name}</h3>
+          <h3 className="profile-name">{displayName}</h3>
 
           <div className="profile-meta">
-            <div><span className="meta-k">Condition</span><span className="meta-v">{user.condition}</span></div>
-            <div><span className="meta-k">City</span><span className="meta-v">{user.city}</span></div>
+            <div><span className="meta-k">Condition</span><span className="meta-v">{fallbackUser.condition}</span></div>
+            <div><span className="meta-k">City</span><span className="meta-v">{fallbackUser.city}</span></div>
             <div><span className="meta-k">Age</span><span className="meta-v">30–40</span></div>
           </div>
         </div>
