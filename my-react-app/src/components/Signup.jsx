@@ -1,19 +1,21 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Signup.css";
-import signupImage from "../assets/login.png"; // reuse your existing image
+import loginImage from "../assets/login.png"; // same illustration for consistency
 
 function Signup() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    name: "",
+    first_name: "",
+    last_name: "",
     email: "",
     password: "",
-    confirmPassword: "",
-    mobile: "",
-    location: "",
+    role: "PATIENT",
   });
+
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleChange = (e) => {
     setFormData({
@@ -22,46 +24,87 @@ function Signup() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
+    setError("");
+    setSuccess("");
 
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
-      return;
+    try {
+      const response = await fetch(
+        "https://ai-clinical-trial-matchmaker.onrender.com/users/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            accept: "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error || "Signup failed. Try again.");
+        return;
+      }
+
+      // Store token & user data
+      localStorage.setItem("access_token", data.access_token);
+      localStorage.setItem("user_id", data.user_id);
+      localStorage.setItem("email", data.email);
+      localStorage.setItem("first_name", data.first_name);
+      localStorage.setItem("last_name", data.last_name);
+
+      setSuccess("Signup successful!");
+
+      setTimeout(() => navigate("/create-profile"), 500);
+    } catch (err) {
+      console.error(err);
+      setError("Something went wrong.");
     }
-
-    // Simulate account creation
-    console.log("New Patient Account Created:", formData);
-
-    alert("Account created successfully! Please log in.");
-    navigate("/");
   };
 
   return (
     <div className="signup-container">
+
+      {/* LEFT SECTION */}
       <div className="signup-left">
         <div className="logo">TrialMatcher</div>
-        <img src={signupImage} alt="Signup Illustration" className="signup-image" />
+        <img src={loginImage} alt="Signup Illustration" className="signup-image" />
       </div>
 
+      {/* RIGHT SECTION */}
       <div className="signup-right">
-        <h2 className="signup-title">Create Account</h2>
-        <form className="signup-form" onSubmit={handleSubmit}>
-          <label htmlFor="name">Patient Name</label>
+        <h2 className="signup-title">Create your account</h2>
+
+        {error && <p className="error-text">{error}</p>}
+        {success && <p className="success-text">{success}</p>}
+
+        <form className="signup-form" onSubmit={handleSignup}>
+          <label>First Name</label>
           <input
             type="text"
-            id="name"
-            name="name"
-            placeholder="John Doe"
-            value={formData.name}
+            name="first_name"
+            placeholder="Aman"
+            value={formData.first_name}
             onChange={handleChange}
             required
           />
 
-          <label htmlFor="email">Email Address</label>
+          <label>Last Name</label>
+          <input
+            type="text"
+            name="last_name"
+            placeholder="Mujawar"
+            value={formData.last_name}
+            onChange={handleChange}
+            required
+          />
+
+          <label>Email Address</label>
           <input
             type="email"
-            id="email"
             name="email"
             placeholder="user@example.com"
             value={formData.email}
@@ -69,10 +112,9 @@ function Signup() {
             required
           />
 
-          <label htmlFor="password">Set Password</label>
+          <label>Password</label>
           <input
             type="password"
-            id="password"
             name="password"
             placeholder="********"
             value={formData.password}
@@ -80,53 +122,17 @@ function Signup() {
             required
           />
 
-          <label htmlFor="confirmPassword">Re-enter Password</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            name="confirmPassword"
-            placeholder="********"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            required
-          />
-
-          <label htmlFor="mobile">Mobile Number</label>
-          <input
-            type="tel"
-            id="mobile"
-            name="mobile"
-            placeholder="9876543210"
-            value={formData.mobile}
-            onChange={handleChange}
-            required
-          />
-
-          <label htmlFor="location">Current Location</label>
-          <input
-            type="text"
-            id="location"
-            name="location"
-            placeholder="City, State"
-            value={formData.location}
-            onChange={handleChange}
-            required
-          />
-
           <button type="submit" className="signup-button">
-            Sign Up
+            Create Account
           </button>
-        </form>
 
-        <p className="signup-footer">
-          Already have an account?{" "}
-          <span
-            className="login-link"
-            onClick={() => navigate("/")}
-          >
-            Log In
-          </span>
-        </p>
+          <p className="signup-login-link">
+            Already have an account?{" "}
+            <a href="/login" className="link-text">
+              Log In
+            </a>
+          </p>
+        </form>
       </div>
     </div>
   );
