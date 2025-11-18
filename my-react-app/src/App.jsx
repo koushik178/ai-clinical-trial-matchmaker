@@ -1,53 +1,84 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import "./App.css";
+
+import Welcome from "./components/Welcome";
 import Login from "./components/Login";
+import Signup from "./components/Signup";
 import Home from "./components/Home";
 import Search from "./components/Search";
 import Notifications from "./components/Notifications";
 import TrialDetails from "./components/TrialDetails";
 import SavedTrials from "./components/SavedTrials";
-import Profile from "./components/Profile";
-import Signup from "./components/Signup";
+import CreateProfile from "./components/CreateProfile";
+import ProfilePage from "./components/ProfilePage"; 
+import Chatbot from "./components/Chatbot";  
+
+// Check JWT token
+const isAuthenticated = () => !!localStorage.getItem("access_token");
+
+// Wrapper to hide chatbot on public pages
+const ChatbotWrapper = () => {
+  const location = useLocation();
+
+  const hideOn = ["/", "/login", "/signup"];
+
+  if (!isAuthenticated() || hideOn.includes(location.pathname)) {
+    return null;
+  }
+
+  return <Chatbot />;
+};
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const handleLogin = (email, password) => {
-    if (email === "koushik@gmail.com" && password === "12345") {
-      setIsLoggedIn(true);
-    } else {
-      alert("Invalid credentials. Please try again.");
-    }
-  };
-
   return (
     <Router>
       <Routes>
-        {/* Default route */}
+        {/* Public Routes */}
+        <Route path="/" element={<Welcome />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+
+        {/* Create Profile */}
         <Route
-          path="/"
-          element={isLoggedIn ? <Navigate to="/home" /> : <Navigate to="/login" />}
+          path="/create-profile"
+          element={isAuthenticated() ? <CreateProfile /> : <Navigate to="/login" />}
         />
 
-        {/* Login route */}
-        <Route path="/login" element={<Login onLogin={handleLogin} />} />
-
-        {/* Protected routes */}
+        {/* Authenticated Routes */}
         <Route
           path="/home"
-          element={isLoggedIn ? <Home /> : <Navigate to="/login" />}
+          element={isAuthenticated() ? <Home /> : <Navigate to="/login" />}
         />
         <Route
           path="/search"
-          element={isLoggedIn ? <Search /> : <Navigate to="/login" />}
+          element={isAuthenticated() ? <Search /> : <Navigate to="/login" />}
         />
-        <Route path="/notifications" element={<Notifications />} />
-        <Route path="/details" element={<TrialDetails />} /> {/* ✅ New route */}
-        <Route path="/saved" element={<SavedTrials />} /> {/* ✅ new route */}
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route
+          path="/notifications"
+          element={isAuthenticated() ? <Notifications /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/details"
+          element={isAuthenticated() ? <TrialDetails /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/saved"
+          element={isAuthenticated() ? <SavedTrials /> : <Navigate to="/login" />}
+        />
+
+        {/* Profile Page */}
+        <Route
+          path="/profile-page"
+          element={isAuthenticated() ? <ProfilePage /> : <Navigate to="/login" />}
+        />
+
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
+
+      {/* Floating Chatbot (protected) */}
+      <ChatbotWrapper />
     </Router>
   );
 }
