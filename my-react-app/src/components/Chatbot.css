@@ -6,63 +6,57 @@
   font-family: "Poppins", sans-serif;
 }
 
-/* ------------------------ */
-/* 🔥 Modern Icon Button */
-/* ------------------------ */
+/* Floating icon */
 .chatbot-icon {
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
-  background-color: #dff3e3; /* soft light green */
-  color: #1a7f2e;            /* dark green icon */
-  border: 1px solid #b7e0c2;
-  font-size: 22px;
+  background-color: #2e9d43;
+  color: #ffffff;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s, background 0.2s;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s, background-color 0.2s;
 }
 
 .chatbot-icon:hover {
-  transform: scale(1.1);
-  background-color: #cdeed6;
+  transform: scale(1.08);
+  background-color: #25863a;
 }
 
-/* ------------------------ */
-/* 💬 Chat Window */
-/* ------------------------ */
+/* Chat Window */
 .chatbot-window {
-  width: 35vw; 
-  max-width: 400px;
-  height: 60vh; 
+  width: 360px;
+  height: 520px;
   background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 6px 18px rgba(0,0,0,0.25);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  animation: slideUp 0.3s ease-out;
+  animation: slideUp 0.25s ease-out;
   position: fixed;
   bottom: 80px;
   right: 20px;
 }
 
 @keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
+  from { transform: translateY(14px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
 
-/* ------------------------ */
-/* 🌿 Header (Green) */
-/* ------------------------ */
+/* Header */
 .chatbot-header {
-  background-color: #2e9d43; /* primary green */
+  background-color: #2e9d43;
   color: white;
   padding: 12px;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -72,50 +66,43 @@
   background: none;
   border: none;
   color: white;
-  font-size: 20px;
+  font-size: 22px;
   cursor: pointer;
 }
 
-/* ------------------------ */
-/* 📨 Messages */
-/* ------------------------ */
+/* Messages */
 .chatbot-messages {
   flex: 1;
-  padding: 10px;
+  padding: 12px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  background-color: #f6fdf8; /* very light green tint */
+  gap: 8px;
+  background-color: #f6fdf8;
 }
 
 .chat-message.user {
   align-self: flex-end;
-  background-color: #d1f7d8;   /* smooth light green bubble */
+  background-color: #d1f7d8;
   color: #0e5b1b;
   padding: 8px 12px;
-  border-radius: 14px;
-  max-width: 80%;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+  border-radius: 12px;
+  max-width: 75%;
 }
 
 .chat-message.bot {
   align-self: flex-start;
-  background-color: #eaf4ea;  /* soft natural gray-green */
-  color: #1e1e1e;
+  background-color: #eaf4ea;
+  color: #222;
   padding: 8px 12px;
-  border-radius: 14px;
-  max-width: 80%;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  max-width: 75%;
 }
 
-/* ------------------------ */
-/* ✏️ Input Field */
-/* ------------------------ */
+/* Input */
 .chatbot-input {
   display: flex;
   border-top: 1px solid #dcecdc;
-  background: #ffffff;
 }
 
 .chatbot-input input {
@@ -124,18 +111,16 @@
   border: none;
   outline: none;
   font-size: 14px;
-  background: #ffffff;
 }
 
 .chatbot-input button {
-  padding: 0 15px;
+  padding: 0 16px;
   background-color: #2e9d43;
   color: white;
   border: none;
   cursor: pointer;
   font-size: 14px;
   font-weight: 600;
-  border-left: 1px solid #c4e5c9;
 }
 
 .chatbot-input button:hover {

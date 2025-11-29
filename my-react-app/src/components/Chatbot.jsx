@@ -4,7 +4,7 @@ import "./Chatbot.css";
 const Chatbot = () => {
   const token = localStorage.getItem("access_token");
 
-  // Only render if token exists
+  // Hide widget if user not logged in
   if (!token) return null;
 
   const [isOpen, setIsOpen] = useState(false);
@@ -14,33 +14,36 @@ const Chatbot = () => {
   const [question, setQuestion] = useState("");
   const messagesEndRef = useRef(null);
 
-  const toggleChat = () => setIsOpen(prev => !prev);
+  const toggleChat = () => setIsOpen((prev) => !prev);
 
   const sendMessage = async () => {
     if (!question.trim()) return;
 
-    const userQuestion = question;
-    setMessages(prev => [...prev, { role: "user", content: userQuestion }]);
+    const userQuestion = question.trim();
+
+    // Add user message
+    setMessages((prev) => [...prev, { role: "user", content: userQuestion }]);
     setQuestion("");
 
     try {
       const res = await fetch("https://ai-clinical-trial-matchmaker.onrender.com/chatbot/ask", {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
-          "Accept": "application/json",
+          Accept: "application/json",
         },
         body: JSON.stringify({ question: userQuestion }),
       });
 
-      if (!res.ok) throw new Error("Failed to get response from AI");
+      if (!res.ok) throw new Error("Unable to process your request right now.");
 
       const data = await res.json();
-      const answer = data.answer || "Sorry, I couldn't understand your question.";
-      setMessages(prev => [...prev, { role: "bot", content: answer }]);
+      const botReply = data.answer || "Sorry, I couldn't understand that.";
+
+      setMessages((prev) => [...prev, { role: "bot", content: botReply }]);
     } catch (err) {
-      setMessages(prev => [...prev, { role: "bot", content: `Error: ${err.message}` }]);
+      setMessages((prev) => [...prev, { role: "bot", content: "Network error. Please try again." }]);
     }
   };
 
@@ -54,13 +57,18 @@ const Chatbot = () => {
 
   return (
     <div className="chatbot-container">
-      <button className="chatbot-icon" onClick={toggleChat}>💬</button>
+      {/* Floating Chat Icon */}
+      <button className="chatbot-icon" onClick={toggleChat}>
+        Chat
+      </button>
 
       {isOpen && (
         <div className="chatbot-window">
           <div className="chatbot-header">
-            AI Clinical Chat
-            <button className="close-btn" onClick={toggleChat}>✖</button>
+            AI Clinical Assistant
+            <button className="close-btn" onClick={toggleChat}>
+              ×
+            </button>
           </div>
 
           <div className="chatbot-messages">
@@ -75,9 +83,9 @@ const Chatbot = () => {
           <div className="chatbot-input">
             <input
               type="text"
-              placeholder="Ask anything..."
+              placeholder="Ask a question..."
               value={question}
-              onChange={e => setQuestion(e.target.value)}
+              onChange={(e) => setQuestion(e.target.value)}
               onKeyDown={handleKeyDown}
             />
             <button onClick={sendMessage}>Send</button>

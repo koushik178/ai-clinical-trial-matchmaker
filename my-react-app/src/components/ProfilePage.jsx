@@ -1,24 +1,34 @@
 // src/components/ProfilePage.jsx
 import React, { useEffect, useState } from "react";
-import "./Profile.css"; // Reuse existing Profile.css styling (you can add minor tweaks below)
-import "./ProfilePanel.css"; // optional for panel-specific styles if present
+import "./Profile.css";
+import "./ProfilePanel.css";
 import SkeletonProfile from "./skeletons/SkeletonProfile";
 import LoadingSpinner from "./LoadingSpinner";
 import profilePicPlaceholder from "../assets/login.png";
 
+const PROFILE_API = "https://ai-clinical-trial-matchmaker.onrender.com/profile/me";
+
 const ProfilePage = () => {
   const [profileData, setProfileData] = useState(null);
-  const [loading, setLoading] = useState(true); // network spinner
-  const [skeleton, setSkeleton] = useState(true); // skeleton UI
+  const [loading, setLoading] = useState(true);
+  const [skeleton, setSkeleton] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchProfile = async () => {
       setLoading(true);
       setSkeleton(true);
+      setError("");
 
       try {
         const token = localStorage.getItem("access_token");
-        const res = await fetch("https://ai-clinical-trial-matchmaker.onrender.com/profile/me", {
+        if (!token) {
+          setError("You are not logged in.");
+          setProfileData(null);
+          return;
+        }
+
+        const res = await fetch(PROFILE_API, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -27,18 +37,28 @@ const ProfilePage = () => {
         });
 
         if (!res.ok) {
-          console.error("Failed to fetch profile:", res.statusText);
+          console.error("Failed to fetch profile:", res.status, res.statusText);
+          let msg = "Failed to load profile.";
+          try {
+            const data = await res.json();
+            if (data?.detail) msg = data.detail;
+          } catch {
+            // ignore parse error
+          }
+          setError(msg);
           setProfileData(null);
           return;
         }
 
         const data = await res.json();
 
-        // brief wait so skeleton feels visible
+        // brief wait so skeleton is visible
         await new Promise((r) => setTimeout(r, 300));
+
         setProfileData(data);
       } catch (err) {
         console.error("Error fetching profile:", err);
+        setError("Network error while loading profile.");
         setProfileData(null);
       } finally {
         setSkeleton(false);
@@ -68,7 +88,7 @@ const ProfilePage = () => {
   if (!profileData) {
     return (
       <div style={{ padding: 28 }}>
-        <p>Unable to load profile. Try reloading or check network.</p>
+        {error ? <p>{error}</p> : <p>Unable to load profile. Try reloading.</p>}
       </div>
     );
   }
@@ -77,19 +97,41 @@ const ProfilePage = () => {
 
   return (
     <div className="profile-page" style={{ padding: 28 }}>
-      <div className="profile-container" style={{ maxWidth: 1100, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 380px", gap: 24 }}>
-        {/* Left: Full profile card */}
+      <div
+        className="profile-container"
+        style={{
+          maxWidth: 1100,
+          margin: "0 auto",
+          display: "grid",
+          gridTemplateColumns: "1fr 380px",
+          gap: 24,
+        }}
+      >
+        {/* LEFT: Main profile card */}
         <div>
           <div className="profile-card" style={{ padding: 20 }}>
             <img
-              src={user.profile_photo_url || profilePicPlaceholder}
+              src={user?.profile_photo_url || profilePicPlaceholder}
               alt="Profile"
-              style={{ width: 120, height: 120, objectFit: "cover", borderRadius: 12 }}
+              style={{
+                width: 120,
+                height: 120,
+                objectFit: "cover",
+                borderRadius: 12,
+              }}
             />
-            <h2 style={{ marginTop: 12 }}>{user.first_name} {user.last_name}</h2>
-            <p style={{ color: "#666", marginBottom: 12 }}>{user.email}</p>
+            <h2 style={{ marginTop: 12 }}>
+              {user?.first_name} {user?.last_name}
+            </h2>
+            <p style={{ color: "#666", marginBottom: 12 }}>{user?.email}</p>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 12,
+              }}
+            >
               <div>
                 <strong>Age</strong>
                 <div>{patient_profile?.age ?? "N/A"}</div>
@@ -111,42 +153,110 @@ const ProfilePage = () => {
             <hr style={{ margin: "16px 0" }} />
 
             <h4>Medical Info</h4>
-            <p><strong>Diagnoses:</strong> {Object.keys(patient_profile?.diagnoses || {}).join(", ") || "N/A"}</p>
-            <p><strong>Allergies:</strong> {Object.keys(patient_profile?.allergies || {}).join(", ") || "N/A"}</p>
-            <p><strong>Medications:</strong> {Object.keys(patient_profile?.medications || {}).join(", ") || "N/A"}</p>
-            <p><strong>Vaccinations:</strong> {Object.keys(patient_profile?.vaccinations || {}).join(", ") || "N/A"}</p>
-            <p><strong>Family History:</strong> {Object.keys(patient_profile?.family_history || {}).join(", ") || "N/A"}</p>
+            <p>
+              <strong>Diagnoses:</strong>{" "}
+              {Object.keys(patient_profile?.diagnoses || {}).join(", ") ||
+                "N/A"}
+            </p>
+            <p>
+              <strong>Allergies:</strong>{" "}
+              {Object.keys(patient_profile?.allergies || {}).join(", ") ||
+                "N/A"}
+            </p>
+            <p>
+              <strong>Medications:</strong>{" "}
+              {Object.keys(patient_profile?.medications || {}).join(", ") ||
+                "N/A"}
+            </p>
+            <p>
+              <strong>Vaccinations:</strong>{" "}
+              {Object.keys(patient_profile?.vaccinations || {}).join(", ") ||
+                "N/A"}
+            </p>
+            <p>
+              <strong>Family History:</strong>{" "}
+              {Object.keys(patient_profile?.family_history || {}).join(", ") ||
+                "N/A"}
+            </p>
 
             <hr style={{ margin: "16px 0" }} />
 
             <h4>Pre-screening</h4>
-            <p><strong>Chronic illness:</strong> {patient_profile?.prescreening?.chronic_illness ?? "N/A"}</p>
-            <p><strong>Previous surgery:</strong> {patient_profile?.prescreening?.previous_surgery ?? "N/A"}</p>
-            <p><strong>On medication:</strong> {patient_profile?.prescreening?.on_medication ?? "N/A"}</p>
-            <p><strong>Notes:</strong> {patient_profile?.prescreening?.notes ?? "N/A"}</p>
+            <p>
+              <strong>Chronic illness:</strong>{" "}
+              {patient_profile?.prescreening?.chronic_illness ?? "N/A"}
+            </p>
+            <p>
+              <strong>Previous surgery:</strong>{" "}
+              {patient_profile?.prescreening?.previous_surgery ?? "N/A"}
+            </p>
+            <p>
+              <strong>On medication:</strong>{" "}
+              {patient_profile?.prescreening?.on_medication ?? "N/A"}
+            </p>
+            <p>
+              <strong>Notes:</strong>{" "}
+              {patient_profile?.prescreening?.notes ?? "N/A"}
+            </p>
           </div>
         </div>
 
-        {/* Right: Sidebar info (compact) */}
+        {/* RIGHT: Sidebar / Summary */}
         <aside className="profile-panel" style={{ padding: 18 }}>
           <div style={{ textAlign: "center" }}>
             <h3>Summary</h3>
             <div style={{ marginTop: 8 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+              <div
+                className="meta-row"
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginBottom: 8,
+                }}
+              >
                 <span className="meta-k">Height</span>
-                <span className="meta-v">{patient_profile?.height_cm ?? "N/A"} cm</span>
+                <span className="meta-v">
+                  {patient_profile?.height_cm ?? "N/A"} cm
+                </span>
               </div>
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+              <div
+                className="meta-row"
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginBottom: 8,
+                }}
+              >
                 <span className="meta-k">Weight</span>
-                <span className="meta-v">{patient_profile?.weight_kg ?? "N/A"} kg</span>
+                <span className="meta-v">
+                  {patient_profile?.weight_kg ?? "N/A"} kg
+                </span>
               </div>
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+              <div
+                className="meta-row"
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginBottom: 8,
+                }}
+              >
                 <span className="meta-k">BMI</span>
-                <span className="meta-v">{patient_profile?.bmi ?? "N/A"}</span>
+                <span className="meta-v">
+                  {patient_profile?.bmi ?? "N/A"}
+                </span>
               </div>
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+              <div
+                className="meta-row"
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginBottom: 8,
+                }}
+              >
                 <span className="meta-k">Contact</span>
-                <span className="meta-v">{patient_profile?.contact_preference ?? "N/A"}</span>
+                <span className="meta-v">
+                  {patient_profile?.contact_preference ?? "N/A"}
+                </span>
               </div>
             </div>
           </div>
@@ -155,24 +265,51 @@ const ProfilePage = () => {
 
           <h4>Insurance</h4>
           <div style={{ display: "grid", gap: 8 }}>
-            <div><strong>Provider:</strong> {patient_profile?.insurance?.provider ?? "N/A"}</div>
-            <div><strong>Policy #:</strong> {patient_profile?.insurance?.policy_number ?? "N/A"}</div>
+            <div>
+              <strong>Provider:</strong>{" "}
+              {patient_profile?.insurance?.provider ?? "N/A"}
+            </div>
+            <div>
+              <strong>Policy #:</strong>{" "}
+              {patient_profile?.insurance?.policy_number ?? "N/A"}
+            </div>
           </div>
 
           <hr style={{ margin: "12px 0" }} />
 
           <h4>Emergency Contact</h4>
           <div style={{ display: "grid", gap: 8 }}>
-            <div><strong>Name:</strong> {patient_profile?.emergency_contact?.name ?? "N/A"}</div>
-            <div><strong>Phone:</strong> {patient_profile?.emergency_contact?.phone ?? "N/A"}</div>
-            <div><strong>Relation:</strong> {patient_profile?.emergency_contact?.relation ?? "N/A"}</div>
+            <div>
+              <strong>Name:</strong>{" "}
+              {patient_profile?.emergency_contact?.name ?? "N/A"}
+            </div>
+            <div>
+              <strong>Phone:</strong>{" "}
+              {patient_profile?.emergency_contact?.phone ?? "N/A"}
+            </div>
+            <div>
+              <strong>Relation:</strong>{" "}
+              {patient_profile?.emergency_contact?.relation ?? "N/A"}
+            </div>
           </div>
 
           <hr style={{ margin: "12px 0" }} />
 
           <div style={{ display: "flex", gap: 10 }}>
-            <button className="edit-btn" onClick={() => window.location.href = "/create-profile"}>Edit Info</button>
-            <button className="start-btn" onClick={() => window.location.href = "/search"}>Find Trials</button>
+            <button
+              className="edit-btn"
+              onClick={() =>
+                (window.location.href = "/create-profile?edit=true")
+              }
+            >
+              Edit Info
+            </button>
+            <button
+              className="start-btn"
+              onClick={() => (window.location.href = "/search")}
+            >
+              Find Trials
+            </button>
           </div>
         </aside>
       </div>
